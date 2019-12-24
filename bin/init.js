@@ -15,15 +15,8 @@ const {
 } = require('../lib/task');
 
 // const
-const {
-	PROJECT_NAME,
-	PROJECT_DESC,
-	FE_FRAME,
-	CSS_PREPROCESSOR,
-	USE_CSS_MODULE
-} = require('../lib/constants');
-
-const templateUrl = 'github:https://github.com:ShuyunFF2E/ccms-angular-styleguide#master';
+const { CONFIG, TEMPLATES } = require('../lib/constants');
+const { PROJECT_NAME, PROJECT_DESC, FE_FRAME, CSS_PREPROCESSOR, USE_CSS_MODULE } = CONFIG;
 
 program
 	.version(package.version)
@@ -55,7 +48,7 @@ program
 
 		spinner.start(chalk.green('Downloading template'));
 
-		await new Promise(resolve => download(templateUrl, config[PROJECT_NAME], { clone: true }, resolve));
+		await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
 
 		spinner.succeed(chalk.green('Download successful'));
     })
