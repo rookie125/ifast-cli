@@ -22,10 +22,10 @@ const { PROJECT_NAME, PROJECT_DESC, FE_FRAME, CSS_PREPROCESSOR, USE_CSS_MODULE }
 program
 	.version(package.version)
 	.command('init')
-    .description('Create a new project')
-    .action(async () => {
+	.description('Create a new project')
+	.action(async () => {
 
-        const config = {
+		const config = {
 			[PROJECT_NAME]: '',
 			[PROJECT_DESC]: '',
 			[FE_FRAME]: '',
@@ -76,11 +76,11 @@ program
 			console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm install\``)} to install dependencies`);
 		}
 
-    })
-    .on('--help', function() {
-        console.log('  Examples:')
-        console.log('')
-        console.log(`$ ${package.name} init`)
-    })
+	})
+	.on('--help', function() {
+		console.log('  Examples:')
+		console.log('')
+		console.log(`$ ${package.name} init`)
+	})
 
 program.parse(process.argv)
