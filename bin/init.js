@@ -44,9 +44,12 @@ program
 
 		// downloading template
 		spinner.start(chalk.green('Downloading template'));
-
-		await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
-
+		const err = await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
+		
+		if (err) {
+			console.log(chalk.red('Network connection timed out'));
+			process.exit(1);
+		}
 		spinner.succeed(chalk.green('Download successful'));
 
 
