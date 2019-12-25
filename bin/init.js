@@ -3,6 +3,7 @@
 const program = require('commander');
 const chalk = require('chalk');
 const ora = require('ora');
+const exec = require('child_process').exec;
 const download = require('download-git-repo');
 const package = require('../package.json');
 
@@ -11,7 +12,7 @@ const {
 	baseTask,
 	frameTask,
 	cssChoicesTask,
-	cssModuleTask
+	installTask
 } = require('../lib/task');
 
 // const
@@ -22,7 +23,7 @@ program
 	.version(package.version)
 	.command('init')
     .description('Create a new project')
-    .action(async option => {
+    .action(async () => {
 
         const config = {
 			[PROJECT_NAME]: '',
@@ -32,25 +33,46 @@ program
 			[USE_CSS_MODULE]: false
 		};
 
+		// exec task
 		Object.assign(config, {
 			...await baseTask(),
 			...await frameTask(),
 			...await cssChoicesTask()
 		});
-
-		if (['less', 'sass'].includes(config[CSS_PREPROCESSOR])) {
-			Object.assign(config, await cssModuleTask());
-		} else {
-			delete config[USE_CSS_MODULE];
-		}
 		
-		const spinner = ora();
+		let spinner = ora();
 
+		// downloading template
 		spinner.start(chalk.green('Downloading template'));
 
 		await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
 
 		spinner.succeed(chalk.green('Download successful'));
+
+
+		// install dependencies
+		const installRes = await installTask();
+
+		if (installRes[CONFIG.INSTALL_DEP]) {
+			spinner = ora();
+
+			spinner.start(chalk.green('Installing dependent packages'));
+
+			exec(`cd ${config[PROJECT_NAME]} && yarn install`, (err, stdout) => {
+				if (err) process.exit(1);
+
+				console.log('');
+				console.log(stdout);
+				spinner.succeed(chalk.green('Successfully installed dependencies'));
+
+				console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm start\``)} to start the application`);
+				process.exit(0);
+			});
+		} else {
+			console.log('')
+			console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm install\``)} to install dependencies`);
+		}
+
     })
     .on('--help', function() {
         console.log('  Examples:')
