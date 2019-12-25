@@ -6,6 +6,7 @@ const ora = require('ora');
 const exec = require('child_process').exec;
 const download = require('download-git-repo');
 const package = require('../package.json');
+const installDep = require('../lib/install-dep');
 
 // task
 const {
@@ -57,20 +58,7 @@ program
 		const installRes = await installTask();
 
 		if (installRes[CONFIG.INSTALL_DEP]) {
-			spinner = ora();
-
-			spinner.start(chalk.green('Installing dependent packages'));
-
-			exec(`cd ${config[PROJECT_NAME]} && yarn install`, (err, stdout) => {
-				if (err) process.exit(1);
-
-				console.log('');
-				console.log(stdout);
-				spinner.succeed(chalk.green('Successfully installed dependencies'));
-
-				console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm start\``)} to start the application`);
-				process.exit(0);
-			});
+			installDep(config[PROJECT_NAME]);
 		} else {
 			console.log('')
 			console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm install\``)} to install dependencies`);

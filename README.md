@@ -33,7 +33,10 @@ $ fast-cli init
     1) LESS
     2) CSS
     Answer: LESS
-? Whether to enable the CSS Module (Y/n): Y
+
 # 1. . Downloading template
 # 2. ✔ Download successful
+
+? Do you need to install dependencies (Y/n): Y
+# cd name && npm install
 ```
