@@ -1,10 +1,14 @@
 #! /usr/bin/env node 
 
+const path = require('path')
+const fs = require('fs');
+
 const program = require('commander');
 const chalk = require('chalk');
 const ora = require('ora');
 const exec = require('child_process').exec;
 const download = require('download-git-repo');
+
 const package = require('../package.json');
 const installDep = require('../lib/install-dep');
 
@@ -12,7 +16,6 @@ const installDep = require('../lib/install-dep');
 const {
 	baseTask,
 	frameTask,
-	cssChoicesTask,
 	installTask
 } = require('../lib/task');
 
@@ -38,7 +41,8 @@ program
 		Object.assign(config, {
 			...await baseTask(),
 			...await frameTask(),
-			...await cssChoicesTask()
+			// 
+			// ...await cssChoicesTask()
 		});
 		
 		let spinner = ora();
@@ -46,15 +50,23 @@ program
 		// downloading template
 		spinner.start(chalk.green('Downloading template'));
 		const err = await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
-		
+
 		if (err) {
 			console.log(chalk.red('Network connection timed out'));
 			process.exit(1);
 		}
+
+		// The file path of the current project
+		// const projectPath = path.resolve(process.env.PWD, config[PROJECT_NAME]);
+
+		// Do something...
+		// console.log(JSON.parse(fs.readFileSync(path.resolve(projectPath, 'package.json'), 'utf-8')))
+
+
 		spinner.succeed(chalk.green('Download successful'));
 
 
-		// install dependencies
+		// Install dependencies
 		const installRes = await installTask();
 
 		if (installRes[CONFIG.INSTALL_DEP]) {

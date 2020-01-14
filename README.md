@@ -29,10 +29,6 @@ $ fast-cli init
     2) Vue
     3) ES2015+
     Answer: ES2015+
-? Please choose a CSS preprocessor
-    1) LESS
-    2) CSS
-    Answer: LESS
 
 # 1. . Downloading template
 # 2. ✔ Download successful
