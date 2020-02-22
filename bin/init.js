@@ -11,6 +11,7 @@ const download = require('download-git-repo');
 
 const package = require('../package.json');
 const installDep = require('../lib/install-dep');
+const replacePackageConf = require('../lib/replace-package-conf');
 
 // task
 const {
@@ -57,10 +58,10 @@ program
 		}
 
 		// The file path of the current project
-		// const projectPath = path.resolve(process.env.PWD, config[PROJECT_NAME]);
+		const projectPath = path.resolve(process.env.PWD, config[PROJECT_NAME]);
 
-		// Do something...
-		// console.log(JSON.parse(fs.readFileSync(path.resolve(projectPath, 'package.json'), 'utf-8')))
+		// replace package.name|description
+		replacePackageConf(projectPath, config)
 
 
 		spinner.succeed(chalk.green('Download successful'));
