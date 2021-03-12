@@ -1,12 +1,13 @@
 {
   "name": "ifast-cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
-  "bin": {
-    "ifast": "./bin/init.js"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rookie125/ifast-cli.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "ifast": "./bin/cli.js"
   },
   "author": "rookie125",
   "license": "MIT",
@@ -15,9 +16,9 @@
     "commander": "^4.0.1",
     "cross-spawn": "^7.0.3",
     "download-git-repo": "^3.0.2",
+    "fs-extra": "^9.1.0",
     "inquirer": "^7.0.0",
-    "lodash": "^4.17.15",
     "ora": "^4.0.3",
-    "prettier": "^2.0.5"
+    "short-uuid": "^4.1.0"
   }
 }

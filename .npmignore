@@ -1,0 +1,12 @@
+.vscode
+.gitignore
+.github
+.editorconfig
+.travis.yml
+.templateignore
+.template.json
+templates
+coverage
+package-lock.lock
+coverage.lcov
+CHANGELOG.md
