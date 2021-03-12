@@ -15,12 +15,12 @@ $ npm install -g ifast-cli
 
 ```bash
 # Initialize new project
-$ ifast-cli create
+$ ifast create
 ```
 
 ## Examples
 ```bash
-$ ifast-cli create
+$ ifast create
 
 ? Please enter a project name: my-app
 ? Please enter a project description: description...
