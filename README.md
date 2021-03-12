@@ -1,26 +1,26 @@
-## fast-cli
+## ifast-cli
 
 > Quickly create react, Vue or applications without front-end framework
 
 ## Install
 ```bash
 # yarn
-$ yarn global add fast-cli
+$ yarn global add ifast-cli
 
 # npm
-$ npm install -g fast-cli
+$ npm install -g ifast-cli
 ```
 
 ## Usege
 
 ```bash
 # Initialize new project
-$ fast-cli init
+$ ifast-cli create
 ```
 
 ## Examples
 ```bash
-$ fast-cli init
+$ ifast-cli create
 
 ? Please enter a project name: my-app
 ? Please enter a project description: description...

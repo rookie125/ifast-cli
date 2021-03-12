@@ -1,24 +1,19 @@
 #! /usr/bin/env node 
 
 const path = require('path')
-const fs = require('fs');
 
 const program = require('commander');
 const chalk = require('chalk');
 const ora = require('ora');
-const exec = require('child_process').exec;
-const download = require('download-git-repo');
+
+const utils = require('../lib/utils');
 
 const package = require('../package.json');
 const installDep = require('../lib/install-dep');
 const replacePackageConf = require('../lib/replace-package-conf');
 
 // task
-const {
-	baseTask,
-	frameTask,
-	installTask
-} = require('../lib/task');
+const { baseTask, frameTask, installTask } = require('../lib/task');
 
 // const
 const { CONFIG, TEMPLATES } = require('../lib/constants');
@@ -26,31 +21,28 @@ const { PROJECT_NAME, PROJECT_DESC, FE_FRAME, CSS_PREPROCESSOR, USE_CSS_MODULE }
 
 program
 	.version(package.version)
-	.command('init')
+	.command('create')
 	.description('Create a new project')
 	.action(async () => {
-
-		const config = {
+		const config = Object.assign({
 			[PROJECT_NAME]: '',
 			[PROJECT_DESC]: '',
 			[FE_FRAME]: '',
 			[CSS_PREPROCESSOR]: '',
 			[USE_CSS_MODULE]: false
-		};
-
-		// exec task
-		Object.assign(config, {
+		}, {
 			...await baseTask(),
 			...await frameTask(),
-			// 
-			// ...await cssChoicesTask()
-		});
-		
-		let spinner = ora();
+		});;
+
+		const projectName = config[PROJECT_NAME];
+		const dirPath = `./${projectName}`;
+		const spinner = ora();
 
 		// downloading template
 		spinner.start(chalk.green('Downloading template'));
-		const err = await new Promise(resolve => download(TEMPLATES[config[FE_FRAME]], config[PROJECT_NAME], { clone: true }, resolve));
+
+		const err = await utils.cloneRepo(TEMPLATES[config[FE_FRAME]], dirPath);
 
 		if (err) {
 			console.log(chalk.red('Network connection timed out'));
@@ -58,25 +50,22 @@ program
 		}
 
 		// The file path of the current project
-		const projectPath = path.resolve(process.env.PWD, config[PROJECT_NAME]);
-
+		const projectPath = path.resolve(process.cwd() || process.env.PWD, projectName);
+	
 		// replace package.name|description
 		replacePackageConf(projectPath, config)
 
-
 		spinner.succeed(chalk.green('Download successful'));
-
 
 		// Install dependencies
 		const installRes = await installTask();
 
 		if (installRes[CONFIG.INSTALL_DEP]) {
-			installDep(config[PROJECT_NAME]);
+			installDep(projectPath, projectName);
 		} else {
 			console.log('')
 			console.log(`You can execute ${chalk.green(`\`cd ${config[PROJECT_NAME]} && npm install\``)} to install dependencies`);
 		}
-
 	})
 	.on('--help', function() {
 		console.log('  Examples:')
