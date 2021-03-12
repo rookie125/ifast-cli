@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "rookie125",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
