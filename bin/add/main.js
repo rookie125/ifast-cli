@@ -1,18 +1,18 @@
 const fs = require('fs');
+const os = require('os');
 const ora = require('ora');
 const path = require('path');
 const chalk = require('chalk');
+const package = require('../../package.json');
 const fsExtra = require('fs-extra');
 const short = require('short-uuid')();
 
 const utils = require('../../lib/utils');
 const template = require('../../lib/Template');
-const { LOCAL, REMOTE } = require('../../lib/constants');
+const { LOCAL, REMOTE, TEMPLATE_CONFIG_FILE } = require('../../lib/constants');
 
 const URL_REG = /^https:\/\/.+/i;
-const rootPath = path.resolve(__dirname, '../../');
-const templatePath = path.resolve(rootPath, 'templates');
-const templateignore = fsExtra.readFileSync(path.resolve(rootPath, '.templateignore'), 'utf-8').split('\n');
+const rootPath = path.resolve(os.homedir(), '.' + package.name);
 
 module.exports = async function create(name, repo) {
     const id = short.new();
@@ -30,7 +30,9 @@ module.exports = async function create(name, repo) {
             }
         });
     } else if (utils.fsExistsSync(repo)) {
-        const dirs = utils.fsEachFiles(repo, templateignore);
+        const templatePath = path.resolve(rootPath, 'templates');
+        const config = fsExtra.readJSONSync(path.resolve(rootPath, TEMPLATE_CONFIG_FILE));
+        const dirs = utils.fsEachFiles(repo, config.ignore);
 
         while (dirs.length) {
             const dir = dirs.shift();

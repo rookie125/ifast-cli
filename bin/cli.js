@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+const os = require('os');
 const program = require('commander');
 const package = require('../package.json');
 
+require('./add/generator')();
 
 // create project by template
 program
@@ -10,8 +12,6 @@ program
 	.description('Create a new project')
 	.action((name) => {
 		if (!name) process.exit(1);
-
-		console.log(name)
 
 		require('./create/main')(name);
 	})
