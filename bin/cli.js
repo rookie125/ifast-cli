@@ -11,6 +11,8 @@ program
 	.action((name) => {
 		if (!name) process.exit(1);
 
+		console.log(name)
+
 		require('./create/main')(name);
 	})
 	.on('--help', require('./create/help'))
@@ -26,6 +28,19 @@ program
 		require('./add/main')(name, repo);
 	})
 	.on('--help', require('./add/help'))
+
+// remove template
+program
+	.command('remove')
+	.description('Remove custom template from ifast')
+	.action(require('./remove/main'))
+
+
+// show list
+program
+	.command('list')
+	.description('list all available project template')
+	.action(require('./list/main'))
 
 
 program
